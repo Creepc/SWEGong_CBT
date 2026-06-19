@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>소웨공 기말 CBT</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>소웨공 기말 CBT</h1>
+      <p>소프트웨어공학 기말 범위 정리노트 · 문제은행 · 모의고사</p>
+    </div>
+    <nav>
+      <button data-view="notes" class="active">정리노트</button>
+      <button data-view="bank">문제은행</button>
+      <button data-view="calc">계산문제</button>
+      <button data-view="mock">모의고사</button>
+    </nav>
+  </header>
+  <main>
+    <aside>
+      <input id="search" placeholder="검색: COCOMO, ILF, Strategy...">
+      <div id="unitList"></div>
+    </aside>
+    <section id="content"></section>
+  </main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
