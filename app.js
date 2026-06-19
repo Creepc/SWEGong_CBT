@@ -39,8 +39,9 @@ function questionCard(q, i){
     <div class="answer" id="answer-${q.id}">
       <p class="result-line" id="result-${q.id}"></p>
       <p class="ok">정답: ${ans}</p>
-      <p><b>정답 이유:</b> ${esc(q.correctReason)}</p>
-      <p><b>오답 이유:</b> ${esc(q.wrongReason)}</p>
+      <p><b>전체 해설:</b> ${esc(q.correctReason)}</p>
+      <p><b>선지별 해설:</b></p>
+      <ol class="option-explain">${(q.optionExplanations || q.options.map((_,idx)=>`${idx+1}번: 강의자료의 기준과 비교해 판단합니다.`)).map(exp=>`<li>${esc(exp)}</li>`).join("")}</ol>
       <p><b>시험 포인트:</b> ${esc(q.examPoint)}</p>
     </div>
   </article>`;

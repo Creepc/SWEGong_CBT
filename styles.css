@@ -26,6 +26,8 @@ aside { position:sticky; top:96px; align-self:start; background:var(--panel); bo
 .option-btn.correct { background:#eaf7ef; border-color:#75b798; color:#0f5132; }
 .option-btn.wrong { background:#fdecec; border-color:#f1aeb5; color:#842029; }
 .result-line { margin:10px 0; font-weight:800; }
+.option-explain { margin:10px 0 0; padding-left:20px; }
+.option-explain li { margin:8px 0; }
 .answer { display:none; margin-top:10px; border-top:1px solid var(--line); padding-top:10px; }
 .answer.show { display:block; }
 .ok { color:var(--ok); font-weight:700; }
