@@ -19,7 +19,13 @@ aside { position:sticky; top:96px; align-self:start; background:var(--panel); bo
 .badge { display:inline-block; padding:2px 8px; border-radius:999px; background:#eef4ff; color:#175cd3; font-size:12px; font-weight:700; margin-right:6px; }
 .question { border-left:4px solid var(--accent); }
 .options { list-style:none; padding:0; margin:10px 0; }
-.options li { padding:8px 10px; border:1px solid var(--line); border-radius:6px; margin:6px 0; background:#fbfcfe; }
+.options li { margin:6px 0; }
+.option-btn { width:100%; text-align:left; color:var(--text); font-weight:500; padding:10px 12px; border:1px solid var(--line); border-radius:6px; background:#fbfcfe; line-height:1.5; }
+.option-btn:hover { background:#eef7fb; color:var(--text); border-color:#9fcadd; }
+.option-btn.selected { background:#fff7df; border-color:#e4b84f; color:#533f00; }
+.option-btn.correct { background:#eaf7ef; border-color:#75b798; color:#0f5132; }
+.option-btn.wrong { background:#fdecec; border-color:#f1aeb5; color:#842029; }
+.result-line { margin:10px 0; font-weight:800; }
 .answer { display:none; margin-top:10px; border-top:1px solid var(--line); padding-top:10px; }
 .answer.show { display:block; }
 .ok { color:var(--ok); font-weight:700; }
