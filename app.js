@@ -2,9 +2,11 @@ const state = { view: "notes", unit: 0, query: "" };
 const $ = (s) => document.querySelector(s);
 const data = window.STUDY_DATA;
 const questionMap = new Map();
+const shortMap = new Map();
 const selectedMap = new Map();
 data.bank.flatMap(section => section.questions).forEach(q => questionMap.set(q.id, q));
 data.mocks.flatMap(mock => mock.questions).forEach(q => questionMap.set(q.id, q));
+data.shortBank.flatMap(section => section.questions).forEach(q => shortMap.set(q.id, q));
 
 function esc(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function matchText(obj){
@@ -45,6 +47,49 @@ function questionCard(q, i){
       <p><b>시험 포인트:</b> ${esc(q.examPoint)}</p>
     </div>
   </article>`;
+}
+function shortCard(q, i){
+  return `<article class="card question">
+    <div><span class="badge">단답형</span><span class="muted">${esc(q.unit)}</span></div>
+    <h3>문제 ${i}</h3><p>${esc(q.prompt)}</p>
+    <div class="short-form">
+      <input class="short-input" id="short-input-${q.id}" data-qid="${q.id}" placeholder="정답 입력">
+      <button onclick="gradeShort('${q.id}')">채점</button>
+      <button onclick="resetShort('${q.id}')">다시 풀기</button>
+    </div>
+    <div class="answer" id="short-answer-${q.id}">
+      <p class="result-line" id="short-result-${q.id}"></p>
+      <p class="accepted"><b>허용 정답:</b> ${q.answers.map(esc).join(", ")}</p>
+      <p><b>해설:</b> ${esc(q.explanation)}</p>
+      <p><b>시험 포인트:</b> ${esc(q.examPoint)}</p>
+    </div>
+  </article>`;
+}
+function normalizeAnswer(s){
+  return String(s)
+    .toLowerCase()
+    .replace(/[\s\-_/()\[\]{}·,.:;'"`]+/g, "")
+    .replace(/×/g, "x")
+    .replace(/＋/g, "+")
+    .trim();
+}
+function gradeShort(qid){
+  const q = shortMap.get(qid);
+  if(!q) return;
+  const input = document.getElementById(`short-input-${qid}`);
+  const value = input ? input.value : "";
+  const normalized = normalizeAnswer(value);
+  const ok = normalized.length > 0 && q.answers.some(a => normalizeAnswer(a) === normalized);
+  const result = document.getElementById(`short-result-${qid}`);
+  result.className = `result-line ${ok ? 'ok' : 'bad'}`;
+  result.textContent = ok ? "정답입니다." : `오답입니다. 입력한 답: ${value || "없음"}`;
+  document.getElementById(`short-answer-${qid}`).classList.add("show");
+}
+function resetShort(qid){
+  const input = document.getElementById(`short-input-${qid}`);
+  if(input) input.value = "";
+  const answer = document.getElementById(`short-answer-${qid}`);
+  if(answer) answer.classList.remove("show");
 }
 function buttonsFor(qid){
   return Array.from(document.querySelectorAll(`.option-btn[data-qid="${qid}"]`));
@@ -108,6 +153,10 @@ function render(){
     const section = data.bank[state.unit] || data.bank[0];
     const qs = section.questions.filter(q=>!q.calculation).filter(matchText);
     content.innerHTML = `<div class="card"><h2>${esc(section.unit)} 문제은행</h2><p>${qs.length}문제</p></div>` + qs.map(questionCard).join("");
+  } else if(state.view === "short"){
+    const section = data.shortBank[state.unit] || data.shortBank[0];
+    const qs = section.questions.filter(matchText);
+    content.innerHTML = `<div class="card"><h2>${esc(section.unit)} 단답형</h2><p>${qs.length}문제</p><p class="muted">약어와 한글 명칭은 가능한 경우 모두 허용 정답으로 처리했습니다.</p></div>` + qs.map(shortCard).join("");
   } else if(state.view === "calc"){
     const qs = data.bank.flatMap(s=>s.questions).filter(q=>q.calculation).filter(matchText);
     content.innerHTML = `<div class="card"><h2>계산 문제 모음</h2><p>${qs.length}문제</p></div>` + qs.map(questionCard).join("");
